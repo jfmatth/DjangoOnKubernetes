@@ -12,7 +12,7 @@
 
 ## Why did I build this?
 
-As a Windows user, there aren't a lot of guides to using Kubernetes on your laptop for development in Django and Kubernetes.   I wanted to understand how to move my Django project over to Kubernetes, so I thought what better way than to do a step by step tutorial for me and others.  I hope you enjoy!
+As a Django Windows user, there aren't a lot of guides to using Kubernetes on your laptop for development.  Minikube is a great resource and provides so many great K8s features, but i'm going to use MicroK8s in this example.   I wanted to understand how to move my Django project over to Kubernetes, so I thought what better way than to do a step by step tutorial for me and others.  I hope you enjoy!
 
 ## Requirements  
 
@@ -54,7 +54,7 @@ This section we'll setup a basic Django app, just like the beggining of the tuto
     python manage.py runserver
     ```
 - Validate that you can login into https://127.0.0.1:8000/admin
-  
+
 ### Stage 2 - Using waitress-serve as our WSGI server and using Whitenoise for static files 
 
 Waitress is a WSGI server from the pylons project, is pure-python and runs nicely on Windows (as well as in a container). Whitenoise takes the pain out of serving static files from django in production, without setting up NGINX, Apache or a CDN.  
@@ -76,6 +76,11 @@ Waitress is a WSGI server from the pylons project, is pure-python and runs nicel
     ```
     STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
     ```
+- Run Collectstatic to build the assets that Whitenoise will use
+    ```
+    python manage.py collectstatic
+    ```
+
 - Try using waitress-serve to server out the Admin interface
     ```
     waitress-serve --listen=127.0.0.1:8000  djangoonk8s.wsgi:application
