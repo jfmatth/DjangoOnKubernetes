@@ -20,19 +20,39 @@ As a Windows user, there aren't a lot of guides to using Kubernetes on your lapt
 - Helpful - Docker knowledge
 - Helpful - A basic understanding of K8s objects
 
-### Stage 1 - Basic Django app running
+### Step 1 - Basic Django 2.x app running (Branch-1)
 
 This section we'll setup a basic Django app, just like the beggining of the tutorial.  Very straight forward
 
 - setup virtual environment for Django
-- Checkout the stage-1 branch
-- pip install -r requirements.txt
-- python manage.py migrate
-- python manage.py createsuperuser (admin, admin@example.com, admin)
-- python manage.py runserver  
-  - Validate that you can login into https://127.0.0.1:8000/admin
-
-### Stage 2 - Using waitress-serve as our WSGI server and using Whitenoise for static files
+- install required libraries (pip install -r requirements.txt)
+```
+Django==2.2.8
+psycopg2-binary==2.8.4
+pytz==2019.3
+sqlparse==0.3.0
+waitress==1.3.1
+whitenoise==4.1.4
+```
+- start django project called djangoonk8s
+```
+django-admin startproject djangoonk8s
+```
+- setup DB
+```
+python manage.py migrate
+```
+- Create superuser (admin, admin@example.com, admin)
+```
+python manage.py createsuperuser
+```
+- Run the server to test everything out  
+```
+python manage.py runserver
+```
+- Validate that you can login into https://127.0.0.1:8000/admin
+  
+### Stage 2 - Using waitress-serve as our WSGI server and using Whitenoise for static files 
 
 - Try using waitress-serve to server out the Admin interface  
   - waitress-serve --listen:127.0.0.1:8000  django_k8s.wsgi:application  
