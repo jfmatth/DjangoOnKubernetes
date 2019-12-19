@@ -59,7 +59,7 @@ This section we'll setup a basic Django app, just like the beggining of the tuto
 
 Waitress is a WSGI server from the pylons project, is pure-python and runs nicely on Windows (as well as in a container). Whitenoise takes the pain out of serving static files from django in production, without setting up NGINX, Apache or a CDN.  
 
-- Add Whitenoise to Django per their documentation (http://whitenoise.evans.io/en/stable/). We are only going to add to our MIDDLEWARE section, if you'd like to research more you can.  
+- Add Whitenoise to Django per their documentation (http://whitenoise.evans.io/en/stable/django.html)
     ```
     MIDDLEWARE = [
     # 'django.middleware.security.SecurityMiddleware',
@@ -67,9 +67,17 @@ Waitress is a WSGI server from the pylons project, is pure-python and runs nicel
     # ...
     ]
     ```
+- Adjust DEBUG and ALLOWED_HOSTS in settings.py
+    ```
+    DEBUG = False
+    ALLOWED_HOSTS = ['*']
+    ```
+- Add a STATIC_ROOT in settings.py for Whitenoise
+    ```
+    STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+    ```
 - Try using waitress-serve to server out the Admin interface
     ```
-    waitress-serve --listen:127.0.0.1:8000  djangonk8s.wsgi:application
+    waitress-serve --listen=127.0.0.1:8000  djangoonk8s.wsgi:application
     ```
 - Validate that Django admin still works (127.0.0.1:8000/admin) with all the images / css / fonts
-
