@@ -1,6 +1,6 @@
-Django==2.2.8
+Django>=2.2.10,< 3.0
 psycopg2-binary==2.8.4
 pytz==2019.3
 sqlparse==0.3.0
-waitress==1.4.1
+waitress==1.4.2
 whitenoise==4.1.4
