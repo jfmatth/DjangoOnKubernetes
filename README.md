@@ -1,15 +1,14 @@
+# DjangoOnKubernetes
 
-# DjangoOnKubernetes (K8s)
-
-## A step by step guide to build a Django app to Kubernetes (Multipass, MicroK8s, Kubernetes, Helm)
+## A step by step guide to build a Django app to Kubernetes (Multipass, K3s, and  Helm)
 
 - Build a basic Django App
   - Use a Windows-friendly waitress WSGI server to serve our app locally and in K8s
   - Utilize whitenoise to server static files from Django
   - Validate admin site functions
 - Use Docker Desktop for Windows to help us build our images
-- Use MicroK8s as our Kubernetes testing platform (or MiniKube)
-- Learn HELM to deploy our application to K8s
+- Use K3s as our Kubernetes testing platform
+- Learn HELM to deploy our application to Kubernetes
 
 ## Why did I build this?
 
@@ -93,42 +92,45 @@ Waitress is a WSGI server from the pylons project, is pure-python and runs nicel
 
 At this point, we have Django running without any apps, in DEBUG mode, serving WSGI via Waitress.  If we turn off DEBUG, the site will fail due to no routing in the urls.py file.  For this example, we'll leave DEBUG on and move onto getting this working with Kubernetes.
 
-### Dockerizing mysite
+## Dockerizing mysite
 
+### Build the Dockerfile
 
+We need to put our entire Djano app into a docker container, luckily this is pretty simple
 
+Create  the following Dockerfile
+    ```
+    FROM python
 
-### Stage 3 - Install Docker for Windows, Multipass, kubectl and Helm
+    WORKDIR /usr/src/app
 
-**Docker for Windows**  
-Docker makes a really nice product here, called Docker Desktop for Windows.  This is a simple install, that figures out what virtualization environment you have, installs the necessary VM's, installs the docker deamon and just works.  It's not too invasive and has some nice options.  
+    COPY requirements.txt ./
 
-Install Docker for Windows per the installation instructions here https://docs.docker.com/docker-for-windows/  
+    RUN pip install -r requirements.txt
 
-Once Docker is installed, run a quick test to make sure it's working for your environment
+    COPY mysite/ ./
+
+    ENTRYPOINT ["waitress-serve"]
+    CMD ["--host=0.0.0.0", "--port=80", "mysite.wsgi:application"]
+    ```
+
+### Test the Dockerfile
+
 ```
-docker run hello-world
+docker run -p 8080:80 mysite
 ```
-**Multipass**  
-Canoical makes Ubuntu, but they also make a really nice VM Manager called Multipass.  We will use Multipass to help us install an Ubuntu VM locally, and then install MicroK8s on it.  
 
-Install Multipass per the installation instructions here https://multipass.run/docs/installing-on-windows
+Browse to the 8080 port of the docker host and you should see the same debug Django screen as before.  If not, you'll have to troubleshoot why, sorry.
 
-Multipass just reached v1.0 and has some nice features, like Ctrl-Alt-U to open up the "Primary" VM for Multipass.  After Multipass is installed and running, try hitting Ctrl+Alt+U and a window will open and start the Primary VM with the latest Ubuntu in it - Very cool!  
+### Push the docker image to dockerhub
 
-**MicroK8s**  
-Canoical also makes a very nice single-node (or more) install of Kubernetes.  It installs super-quick, has some really nice built in functionallity, and best of all, can be used locally or in production.  Sometimes you just need a single-node Kubernetes cluster running on Linode to help get your application running.  
+Until now, we've called our image mysite, but we need to prefix that with our accountname, in my case it's jfmatth.  So I would need to push to jfmatth/mysite.
 
-We will follow the MicroK8s tutorial for windows here https://tutorials.ubuntu.com/tutorial/install-microk8s-on-windows#0 to get a full understanding of installing MicroK8s on an Ubuntu VM.
+If you don't have a dockerhub account, get one their free.  If you have another docker location, you can use that, but this tutorial uses dockerhub.
 
-The MicroK8s tutorial spins up a vm called microk8s-vm, but for the repo, we'll be using the Primary VM, since it's tied to the Ctrl+Alt+U shortcut.
-
-Install MicroK8s on the Primary VM:
-1. Ctrl+Alt+U
-2. ``` snap install microk8s --classic```
-3. ```usrmod -a -G microk8s ubuntu```
-4. exit the window
-5. Ctrl+Alt+U again
-6. ``` microk8s.enable dns dashboard ```
-
+For example
+```
+docker build . -t jfmatth/mysite
+docker push jfmatth/mysite
+```
 
