@@ -1,4 +1,4 @@
-# DjangoOnKubernetes
+# DjangoOnKubernetes v0.2
 
 ## A step by step guide to build a Django app to Kubernetes (Multipass, K3s, and  Helm)
 
