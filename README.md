@@ -149,9 +149,15 @@ docker push jfmatth/mysite
 
 ## HELM
 
-### Install
+### Install Helm
 
-### Setup Chart
+### Create Helm Chart
 
-### Install Chart
+### Install Chart onto cluster
+
+### Tricks for upgrading
+
+
+## Github
+
 

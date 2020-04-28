@@ -13,6 +13,9 @@ spec:
     metadata:
       labels:
         {{- include "chart.selectorLabels" . | nindent 8 }}
+
+      annotations:
+        timestamp : {{ .Values.timestamp }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
