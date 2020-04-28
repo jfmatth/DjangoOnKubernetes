@@ -1,10 +1,12 @@
-FROM python
+FROM python:3.8
+
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+RUN pip install -r requirements.txt
+
+COPY mysite/ ./
 
 ENTRYPOINT ["waitress-serve"]
-CMD ["--host=0.0.0.0", "--port=80", "django_k8s.wsgi:application"]
+CMD ["--host=0.0.0.0", "--port=80", "mysite.wsgi:application"]
