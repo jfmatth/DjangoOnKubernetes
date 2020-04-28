@@ -1,37 +1,56 @@
-# DjangoOnKubernetes v0.2
+# DjangoOnKubernetes - A step by step guide to put a Django app to Kubernetes
 
-## A step by step guide to build a Django app to Kubernetes (Multipass, K3s, and  Helm)
+**GOAL** - Build the simplest Django App possible (```django-admin startproject mysite```) and move it to Kubernetes
 
-- Build a basic Django App
-  - Use a Windows-friendly waitress WSGI server to serve our app locally and in K8s
-  - Utilize whitenoise to server static files from Django
-  - Validate admin site functions
-- Use Docker Desktop for Windows to help us build our images
-- Use K3s as our Kubernetes testing platform
-- Learn HELM to deploy our application to Kubernetes
+- Use a Windows-friendly waitress WSGI server to serve our app locally and in K8s
+- Utilize whitenoise to server static files from Django
+- Use Docker within a VM to help us build our images
+- Use K3s as our Kubernetes platform (local, QA and Production)
+- Use HELM to deploy our application to Kubernetes
+- Use GitHub actions to help with CI / CD of our application
 
 ## Why did I build this?
 
-As a Django Windows user, there aren't a lot of guides to using Kubernetes on your laptop for development.  Minikube is a great resource and provides so many great K8s features, but i'm going to use MicroK8s in this example.   I wanted to understand how to move my Django project over to Kubernetes, so I thought what better way than to do a step by step tutorial for me and others.  I hope you enjoy!
+As a Django Windows user, I don't find a lot of full Django workflows to develop and then send to Kubernetes (w/o many limitations.  Minikube is a great resource and provides so many great K8s features, but it doesn't match production.   I wanted to understand how to move my Django project over to Kubernetes, so I thought what better way than to document and help out others.
 
 ## Requirements  
 
 - Knowledge of django (I don't explain django here)
-- A desktop virtual environment (I use Hyper-V on Windows 10)
+- A desktop virtual environment (I use Hyper-V on Windows 10, Go Windows Pro!)
+- A github account
+- VSCode
 - Helpful - Docker knowledge
 - Helpful - A basic understanding of K8s objects
+ 
+## This repo
+This repo is all my work as it gets updated.  I'm happy to take PR's to improve.  It's an ongoing project, please add.
 
-## Lets Go!
-The master branch has all steps already done, but I've broken each phase out into branches, which you can checkout if you like.  I've listed the branch name in parenthasis () on each step.  
+**I hope you enjoy!**
 
-### Step 1 - Basic Django 2.x app running 
+## Limitations
 
-This section we'll setup a basic Django app, just like the beggining of the tutorial.  Very straight forward
+- Only uses SQLITE, I don't show how to add PostgreSQL
+- I don't break out static files into something fancy, I think Whitenoise does a great job
+- The superuser needs to be created manually when deployed, and this could be automated, TBD
+
+## My Setup
+I have a unique setup as a Windows user, and have a [repo](https://github.com/jfmatth/WindowsK8sSetup) on my setup which includes using linux VM's via Multipass to run my docker and Kubernetes.  I tried the Docker Desktop route, but in the end, it was just a pretty wrapper around what I'm doing anyway.
+
+I build all my Django stuff in the Linux VM's and not Windows (sounds ironic), but in the end I have setup that gives me the best of Windows and the best of Linux (IMHO).
+
+I'm still waiting to try and see if WSL2 will impeed in this area, but honestly, it's close to what I have already, just a little slimmer maybe.
+
+
+# Let's Go!
+
+## Step 1 - Basic Django 2.x app running 
+
+We'll setup a basic Django app, just like the beggining of the tutorial.  Very straight forward
 
 - setup virtual environment for Django
 - install required libraries (pip install -r requirements.txt)
     ```
-    Django>=2.2.10,< 3.0
+    Django>=2.2.10,<3.0
     psycopg2-binary==2.8.4
     pytz==2019.3
     sqlparse==0.3.0
@@ -43,7 +62,7 @@ This section we'll setup a basic Django app, just like the beggining of the tuto
     django-admin startproject mysite
     cd mysite
     ```
-- setup DB
+- setup DB (sqlite)
     ```
     python manage.py migrate
     ```
@@ -55,10 +74,10 @@ This section we'll setup a basic Django app, just like the beggining of the tuto
     ```
     python manage.py runserver
     ```
-- Validate that you can login into https://127.0.0.1:8000/admin  
+- Validate that you can login into https://127.0.0.1:8000/admin
     You should see the default Django "The installed worked sucessfully! Cogratulations" message.  If not, you'll have to troubleshoot
 
-### Step 2 - Using waitress-serve as our WSGI server and using Whitenoise for static files 
+## Step 2 - Using waitress-serve as our WSGI server and using Whitenoise for static files 
 
 Waitress is a WSGI server from the pylons project, is pure-python and runs nicely on Windows (as well as in a container). Whitenoise takes the pain out of serving static files from django in production, without setting up NGINX, Apache or a CDN.  
 
