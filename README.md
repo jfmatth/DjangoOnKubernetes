@@ -155,9 +155,14 @@ docker push jfmatth/mysite
 
 ### Install Chart onto cluster
 
-### Tricks for upgrading
-
 
 ## Github
 
+### github action
+
+### secrets
+
+### Helm install to match
+
+### what is timestamp?
 
