@@ -34,10 +34,4 @@ jobs:
             
     - name: helm upgrade
       run: |
-        echo $RELEASE
-        echo $CHART
-        helm upgrade $RELEASE $CHART --reuse-values --set timestamp="$(date)" --kubeconfig config
-
-      env:
-        RELEASE: ${{ secrets.HELM_RELEASE }}
-        CHART: ${{ secrets.HELM_CHARTDIR }}
+        helm upgrade ${{ secrets.HELM_RELEASE }} ${{ secrets.HELM_CHARTDIR }} --reuse-values --set timestamp="$(date)" --kubeconfig config
