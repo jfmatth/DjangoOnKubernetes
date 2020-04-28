@@ -99,20 +99,20 @@ At this point, we have Django running without any apps, in DEBUG mode, serving W
 We need to put our entire Djano app into a docker container, luckily this is pretty simple
 
 Create  the following Dockerfile
-    ```
-    FROM python
+```
+FROM python
 
-    WORKDIR /usr/src/app
+WORKDIR /usr/src/app
 
-    COPY requirements.txt ./
+COPY requirements.txt ./
 
-    RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
-    COPY mysite/ ./
+COPY mysite/ ./
 
-    ENTRYPOINT ["waitress-serve"]
-    CMD ["--host=0.0.0.0", "--port=80", "mysite.wsgi:application"]
-    ```
+ENTRYPOINT ["waitress-serve"]
+CMD ["--host=0.0.0.0", "--port=80", "mysite.wsgi:application"]
+```
 
 ### Test the Dockerfile
 
@@ -133,4 +133,25 @@ For example
 docker build . -t jfmatth/mysite
 docker push jfmatth/mysite
 ```
+
+## Kubernetes
+
+### Setup Kubernetes Cluster
+
+### Get access and test
+
+### Parts we'll be using
+
+- Ingress
+- Pods
+- Postgres 
+
+
+## HELM
+
+### Install
+
+### Setup Chart
+
+### Install Chart
 
