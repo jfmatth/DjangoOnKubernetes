@@ -42,7 +42,7 @@ I'm still waiting to try and see if WSL2 will impeed in this area, but honestly,
 
 # Let's Go!
 
-## Step 1 - Basic Django 2.x app running 
+## Basic Django 2.x app running 
 
 We'll setup a basic Django app, just like the beggining of the tutorial.  Very straight forward
 
@@ -76,7 +76,7 @@ We'll setup a basic Django app, just like the beggining of the tutorial.  Very s
 - Validate that you can login into https://127.0.0.1:8000/admin
     You should see the default Django "The installed worked sucessfully! Cogratulations" message.  If not, you'll have to troubleshoot
 
-## Step 2 - Using waitress-serve as our WSGI server and using Whitenoise for static files 
+## Using waitress-serve as our WSGI server and using Whitenoise for static files 
 
 Waitress is a WSGI server from the pylons project, is pure-python and runs nicely on Windows (as well as in a container). Whitenoise takes the pain out of serving static files from django in production, without setting up NGINX, Apache or a CDN.  
 
