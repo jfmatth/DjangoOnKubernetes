@@ -40,7 +40,6 @@ I build all my Django stuff in the Linux VM's and not Windows (sounds ironic), b
 
 I'm still waiting to try and see if WSL2 will impeed in this area, but honestly, it's close to what I have already, just a little slimmer maybe.
 
-
 # Let's Go!
 
 ## Step 1 - Basic Django 2.x app running 
@@ -113,7 +112,7 @@ At this point, we have Django running without any apps, in DEBUG mode, serving W
 
 ## Dockerizing mysite
 
-### Build the Dockerfile
+### Create a  Dockerfile
 
 We need to put our entire Djano app into a docker container, luckily this is pretty simple
 
@@ -132,6 +131,13 @@ COPY mysite/ ./
 ENTRYPOINT ["waitress-serve"]
 CMD ["--host=0.0.0.0", "--port=80", "mysite.wsgi:application"]
 ```
+
+### Build the docker image
+
+```
+docker build . -t mysite
+```
+This should run through the steps above and store the image locally
 
 ### Test the Dockerfile
 
