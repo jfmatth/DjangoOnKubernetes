@@ -1,12 +1,13 @@
-FROM python:3.8
+FROM python:3.8-slim
 
-WORKDIR /usr/src/app
+# New for Pipenv - Credit to https://jonathanmeier.io/using-pipenv-with-docker/
+RUN pip install pipenv
+ENV PROJECT_DIR /usr/src/app
+WORKDIR ${PROJECT_DIR}
+COPY Pipfile Pipfile.lock ${PROJECT_DIR}/
+RUN pipenv install --system --deploy --verbose
 
-COPY requirements.txt ./
-
-RUN pip install -r requirements.txt
-
-COPY mysite/ ./
+COPY mysite/ ${PROJECT_DIR}/
 
 RUN python manage.py collectstatic --no-input
 
