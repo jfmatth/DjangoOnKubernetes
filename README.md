@@ -34,28 +34,35 @@ This repo is all my work as it gets updated.  I'm happy to take PR's to improve.
 - The superuser needs to be created manually when deployed, and this could be automated, TBD
 
 ## My Setup
-TBD 
+I have a unique setup as a Windows user, and have a [repo](https://github.com/jfmatth/WindowsK8sSetup) on my setup which includes using linux VM's via Multipass to run my docker and Kubernetes.  I tried the Docker Desktop route, but in the end, it was just a pretty wrapper around what I'm doing anyway.
+
+I build all my Django stuff in the Linux VM's and not Windows (sounds ironic), but in the end I have setup that gives me the best of Windows and the best of Linux (IMHO).
+
+I'm still waiting to try and see if WSL2 will impeed in this area, but honestly, it's close to what I have already, just a little slimmer maybe.
 
 # Let's Go!
 
 ## Basic Django 2.x app running 
 
-We'll setup a basic Django app, just like the beggining of the tutorial.  Very straight forward  
+We'll setup a basic Django app, just like the beggining of the tutorial.  Very straight forward
 
-I've moved to using Pipenv, it's amazing  
-
-```
-pipenv sync
-```
-Should get you everything?
-
+- setup virtual environment for Django
+- install required libraries (pip install -r requirements.txt)
+    ```
+    Django>=2.2.10,<3.0
+    psycopg2-binary==2.8.4
+    pytz==2019.3
+    sqlparse==0.3.0
+    waitress
+    whitenoise
+    ```
 - start django project called djangoonk8s
     ```
     django-admin startproject mysite
     cd mysite
     ```
 - setup DB (sqlite)
-    ```0
+    ```
     python manage.py migrate
     ```
 - Create superuser (admin, admin@example.com, admin)
@@ -87,7 +94,7 @@ Waitress is a WSGI server from the pylons project, is pure-python and runs nicel
     ```
 - Add a STATIC_ROOT in settings.py for Whitenoise
     ```
-    STATIC_ROOT = BASE_DIR / 'assetts'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
     ```
 - Run Collectstatic to build the assets that Whitenoise will use
     ```
