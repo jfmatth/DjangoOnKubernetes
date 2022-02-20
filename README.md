@@ -107,33 +107,34 @@ At this point, we have Django running without any apps, in DEBUG mode, serving W
 
 ### Create a  Dockerfile
 
-We need to put our entire Djano app into a docker container, luckily this is pretty simple
+We need to put our entire Djano app into a docker container, luckily this is pretty simple.  Create the file Dockerfile and put the following in it
 
-Create  the following Dockerfile
-```
-FROM python
 
-WORKDIR /usr/src/app
+``` 
+FROM python:3.8-slim
 
-COPY requirements.txt ./
+# New for Pipenv - Credit to https://jonathanmeier.io/using-pipenv-with-docker/
+RUN pip install pipenv
+ENV PROJECT_DIR /usr/src/app
+WORKDIR ${PROJECT_DIR}
+COPY Pipfile Pipfile.lock ${PROJECT_DIR}/
+RUN pipenv install --system --deploy --verbose
 
-RUN pip install -r requirements.txt
+COPY mysite/ ${PROJECT_DIR}/
 
-COPY mysite/ ./
+RUN python manage.py collectstatic --no-input
 
 ENTRYPOINT ["waitress-serve"]
 CMD ["--host=0.0.0.0", "--port=80", "mysite.wsgi:application"]
 ```
 
 ### Build the docker image
-
 ```
 docker build . -t mysite
 ```
 This should run through the steps above and store the image locally
 
 ### Test the Dockerfile
-
 ```
 docker run -p 8080:80 mysite
 ```
