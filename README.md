@@ -1,3 +1,5 @@
+# **THIS REPO NEEDS UPDATING**
+
 # DjangoOnKubernetes - A step by step guide to put a Django app to Kubernetes
 
 **GOAL** - Build the simplest Django App possible (```django-admin startproject mysite```) and move it to Kubernetes
